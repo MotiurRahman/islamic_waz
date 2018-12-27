@@ -1,6 +1,9 @@
 package morahman.bd.com.islamic_waz;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,16 +26,21 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Waz extends AppCompatActivity {
 
-    private static final String URL_DATA = "http://islamicwaz.org/api/speakerName";
-    private RecyclerView recyclerView;
+
+    private RecyclerView recyclerView_2;
     private RecyclerView.Adapter adapter;
-    private List<ListItem> listItems;
+    private List<ListWaz> listItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,31 +49,53 @@ public class Waz extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        recyclerView =(RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView_2 =(RecyclerView) findViewById(R.id.recyclerView2);
+        recyclerView_2.setHasFixedSize(true);
+        recyclerView_2.setLayoutManager(new LinearLayoutManager(this));
         listItems = new ArrayList<>();
 
         loadRecyclerViewData();
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.parseColor("#3F51B5"));
+        }
+
+        String speakerName = getIntent().getStringExtra("name");
+
+        setTitle("বক্তাঃ "+speakerName);
+
     }
 
     private void loadRecyclerViewData() {
+
+        String speakerName = getIntent().getStringExtra("name");
+
+
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme("http")
+                .authority("islamicwaz.herokuapp.com")
+                .appendPath("api")
+                .appendPath("audioBySpeaker")
+                .appendPath("speaker")
+                .appendPath(speakerName);
+
+        String myUrl = builder.build().toString();
+
+
+        //String URL_DATA = "http://islamicwaz.org/api/speakerName";
+        Log.d("URL Valu","URL:"+myUrl);
+
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loding the data");
         progressDialog.show();
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_DATA, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {
 
 
             @Override
@@ -73,13 +105,20 @@ public class Waz extends AppCompatActivity {
 
                     JSONArray array = new JSONArray(s);
 
+                    Log.e("Data kength","Data Length:"+array.length());
+
+                    if(array.length()==0){
+                        Toast.makeText(getApplicationContext(), "Waz is not been inserted yet for this Speaker", Toast.LENGTH_LONG).show();
+                    }
+
 
                     for (int i = 0; i < array.length(); i++) {
-                        // JSONObject jsonObject = array.getJSONObject(i);
+                         JSONObject jsonObject = array.getJSONObject(i);
                         //String data = array.getString(i);
+                        Log.e("Was Title","Title:"+jsonObject.getString("name"));
 
                         // ListItem item = new ListItem(jsonObject.getString("name"),jsonObject.getString("bio"),jsonObject.getString("imageurl"));
-                        ListItem item = new ListItem(array.getString(i),array.getString(i),array.getString(i));
+                        ListWaz item = new ListWaz(jsonObject.getString("name"),jsonObject.getString("title"), jsonObject.getString("url"));
 
                         // listItems.add(item);
 
@@ -87,12 +126,12 @@ public class Waz extends AppCompatActivity {
 
 
                     }
-                    adapter = new MyAdapter(listItems,getApplicationContext());
-                    recyclerView.setAdapter(adapter);
+                    adapter = new WazAdapter(listItems,getApplicationContext());
+                    recyclerView_2.setAdapter(adapter);
 
 
 
-                    Log.e("Fetch URL Data Test","DataLength:"+array.length());
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

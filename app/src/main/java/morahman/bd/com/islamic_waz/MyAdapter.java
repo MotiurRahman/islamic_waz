@@ -38,14 +38,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final ListItem listItem = listItems.get(position);
         holder.texHead.setText(listItem.getHead());
-        holder.texDesc.setText(listItem.getDesc());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                Intent intent = new Intent(v.getContext(),Waz.class);
+                intent.putExtra("name",listItem.getHead());
                 v.getContext().startActivity(intent);
 
-               //Toast.makeText(context,"You clicked:"+listItem.getHead(),Toast.LENGTH_LONG).show();
+              // Toast.makeText(context,"You clicked:"+listItem.getHead(),Toast.LENGTH_LONG).show();
             }
         });
 
@@ -59,13 +59,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView texHead;
-        public  TextView texDesc;
         public LinearLayout linearLayout;
         public ViewHolder(View itemView) {
             super(itemView);
 
             texHead =(TextView)itemView.findViewById(R.id.heading);
-            texDesc =(TextView)itemView.findViewById(R.id.desc);
             linearLayout =(LinearLayout) itemView.findViewById(R.id.linearLayout);
         }
     }

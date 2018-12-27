@@ -1,9 +1,15 @@
 <resources>
-    <string name="app_name">islamic_waz</string>
+    <string name="app_name">Islamic Waz</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_update">Update this App</string>
+    <string name="action_more">More Apps</string>
+    <string name="action_ratings">Rate This App</string>
+    <string name="bdJobs">All Bd Jobs</string>
+    <string name="bdResult">All Bd Results</string>
     <string name="title_activity_waz">Waz</string>
+    <string name="title_activity_play_waz">PlayWaz</string>
+    <string name="title_activity_waz_play">wazPlay</string>
 </resources>
