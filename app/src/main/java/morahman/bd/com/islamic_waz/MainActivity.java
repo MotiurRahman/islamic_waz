@@ -1,31 +1,36 @@
 package morahman.bd.com.islamic_waz;
 
 import android.annotation.TargetApi;
+
+import com.google.android.material.navigation.NavigationView;
 import com.onesignal.OneSignal;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ShareActionProvider;
+
 import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+
+
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,6 +41,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +49,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String URL_DATA = "http://islamicwaz.herokuapp.com/api/speakerName";
-   // private static final String URL_DATA = "https://21de5eed476cebaf3198da17b936237c6adfaef9.cloudapp-enterprise.appcelerator.com/api/islamicwas";
+    private static final String URL_DATA = "https://islamicwaz.herokuapp.com/api/speakerName";
+    public static View.OnClickListener myOnClickListner;
+    // private static final String URL_DATA = "https://21de5eed476cebaf3198da17b936237c6adfaef9.cloudapp-enterprise.appcelerator.com/api/islamicwas";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<ListItem> listItems;
@@ -53,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        loadRecyclerViewData();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -61,6 +68,9 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         listItems = new ArrayList<>();
+        loadRecyclerViewData();
+
+        myOnClickListner = new MyonclickListner(this);
 
 
 
@@ -125,7 +135,7 @@ public class MainActivity extends AppCompatActivity
 
 
                     for (int i = 0; i < array.length(); i++) {
-                        // JSONObject jsonObject = array.getJSONObject(i);
+                         //JSONObject jsonObject = array.getJSONObject(i);
                         //String data = array.getString(i);
 
                         // ListItem item = new ListItem(jsonObject.getString("name"),jsonObject.getString("bio"),jsonObject.getString("imageurl"));
@@ -136,12 +146,19 @@ public class MainActivity extends AppCompatActivity
 
 
                     }
-                    adapter = new MyAdapter(listItems,getApplicationContext());
-                    recyclerView.setAdapter(adapter);
+
+                    if(listItems!=null){
+                        adapter = new MyAdapter(listItems,getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+                    } else{
+                        loadRecyclerViewData();
+                    }
 
 
 
-                    Log.e("Fetch URL Data Test","DataLength:"+array.length());
+
+                    //Log.e("Fetch URL Data Test","DataLength:"+array.length());
+                    //Toast.makeText(MainActivity.this, +array.length(), Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -153,6 +170,7 @@ public class MainActivity extends AppCompatActivity
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
                // Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("Error Message", error.getMessage());
 
             }
         });
@@ -165,20 +183,20 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+   //     getMenuInflater().inflate(R.menu.main, menu);
 
         // Locate MenuItem with ShareActionProvider
-        MenuItem item = menu.findItem(R.id.nav_share);
+     //   MenuItem item = menu.findItem(R.id.nav_share);
         // Fetch and store ShareActionProvider
-        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-
-        if (mShareActionProvider != null) {
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=motiur_bdjobs.bd.com.allbdjobs");
-            shareIntent.setType("text/plain");
-            mShareActionProvider.setShareIntent(shareIntent);
-        }
+//        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+//
+//        if (mShareActionProvider != null) {
+//            Intent shareIntent = new Intent();
+//            shareIntent.setAction(Intent.ACTION_SEND);
+//            shareIntent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=motiur_bdjobs.bd.com.allbdjobs");
+//            shareIntent.setType("text/plain");
+//            mShareActionProvider.setShareIntent(shareIntent);
+//        }
 
 
         return true;
@@ -270,5 +288,24 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private class MyonclickListner implements View.OnClickListener {
+        public MyonclickListner(MainActivity mainActivity) {
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            int selectedItemPosition = recyclerView.getChildAdapterPosition(v);
+            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(selectedItemPosition);
+            TextView textView = (TextView) viewHolder.itemView.findViewById(R.id.heading);
+            String selectName = (String) textView.getText();
+            Intent intent = new Intent(v.getContext(),Waz.class);
+            intent.putExtra("name",selectName);
+            v.getContext().startActivity(intent);
+
+
+        }
     }
 }
