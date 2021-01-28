@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="morahman.bd.com.islamic_waz">
+    package="morahman.bd.com.islamicWazPro">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="morahman.bd.com.islamicWazPro.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Waz"
+            android:name="morahman.bd.com.islamicWazPro.Waz"
             android:label="@string/title_activity_waz"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>

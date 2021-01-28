@@ -7,7 +7,8 @@
     <string name="action_update">Update this App</string>
     <string name="action_more">More Apps</string>
     <string name="action_ratings">Rate This App</string>
-    <string name="bdJobs">All Bd Jobs</string>
+    <string name="ageCal">Age Calculator</string>
+    <string name="pass">Password Manager</string>
     <string name="bdResult">All Bd Results</string>
     <string name="title_activity_waz">Waz</string>
     <string name="title_activity_play_waz">PlayWaz</string>

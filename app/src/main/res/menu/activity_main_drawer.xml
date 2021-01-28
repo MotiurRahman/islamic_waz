@@ -6,14 +6,19 @@
 
     <item android:title="More Apps">
         <menu>
-        <item
-            android:id="@+id/bdJobs"
-            android:icon="@drawable/ic_menu_send"
-            android:title="@string/bdJobs" />
-        <item
-            android:id="@+id/bdResult"
-            android:icon="@drawable/ic_menu_send"
-            android:title="@string/bdResult" />
+            <item
+                android:id="@+id/ageCal"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/ageCal" />
+            <item
+                android:id="@+id/bdResult"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/bdResult" />
+
+            <item
+                android:id="@+id/pass"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/pass" />
 
         </menu>
     </item>

@@ -1,9 +1,8 @@
-package morahman.bd.com.islamic_waz;
-
-import android.annotation.TargetApi;
+package morahman.bd.com.islamicWazPro;
 
 import com.google.android.material.navigation.NavigationView;
-import com.onesignal.OneSignal;
+
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +24,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,9 +40,9 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -51,10 +50,9 @@ public class MainActivity extends AppCompatActivity
 
     private static final String URL_DATA = "https://islamicwaz.herokuapp.com/api/speakerName";
     public static View.OnClickListener myOnClickListner;
-    // private static final String URL_DATA = "https://21de5eed476cebaf3198da17b936237c6adfaef9.cloudapp-enterprise.appcelerator.com/api/islamicwas";
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private List<ListItem> listItems;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +62,13 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        recyclerView =(RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        listItems = new ArrayList<>();
+        // listItems = new ArrayList<>();
         loadRecyclerViewData();
 
         myOnClickListner = new MyonclickListner(this);
-
-
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -84,18 +80,12 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if(isNetworkConnected()){
+        if (isNetworkConnected()) {
 
         } else {
-        Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
-    }
+            Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
+        }
 
-
-        // OneSignal Initialization
-        OneSignal.startInit(this)
-                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
-                .unsubscribeWhenNotificationsAreDisabled(true)
-                .init();
     }
 
     @Override
@@ -120,7 +110,7 @@ public class MainActivity extends AppCompatActivity
     private void loadRecyclerViewData() {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loding the data");
+        progressDialog.setMessage("Data is Loadding");
         progressDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_DATA, new Response.Listener<String>() {
@@ -131,30 +121,22 @@ public class MainActivity extends AppCompatActivity
                 progressDialog.dismiss();
                 try {
 
-                    JSONArray array = new JSONArray(s);
+                    JSONArray jsonArr = new JSONArray(s);
 
-
-                    for (int i = 0; i < array.length(); i++) {
-                         //JSONObject jsonObject = array.getJSONObject(i);
-                        //String data = array.getString(i);
-
-                        // ListItem item = new ListItem(jsonObject.getString("name"),jsonObject.getString("bio"),jsonObject.getString("imageurl"));
-                        ListItem item = new ListItem(array.getString(i),array.getString(i));
-                        // listItems.add(item);
-
-                        listItems.add(item);
-
-
+                    List<String> jsonValues = new ArrayList<String>();
+                    for (int i = 0; i < jsonArr.length(); i++) {
+                        jsonValues.add(jsonArr.getString(i));
                     }
 
-                    if(listItems!=null){
-                        adapter = new MyAdapter(listItems,getApplicationContext());
+                    Collections.sort(jsonValues, Collections.<String>reverseOrder());
+
+                    if (jsonValues != null) {
+
+                        adapter = new MyAdapter(jsonValues, getApplicationContext());
                         recyclerView.setAdapter(adapter);
-                    } else{
+                    } else {
                         loadRecyclerViewData();
                     }
-
-
 
 
                     //Log.e("Fetch URL Data Test","DataLength:"+array.length());
@@ -169,7 +151,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-               // Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.e("Error Message", error.getMessage());
 
             }
@@ -179,26 +161,19 @@ public class MainActivity extends AppCompatActivity
         requestQueue.add(stringRequest);
     }
 
+    // Open webview
+
+    public void openWeb(View view) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse("https://islamicwaz.herokuapp.com"));
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-   //     getMenuInflater().inflate(R.menu.main, menu);
-
-        // Locate MenuItem with ShareActionProvider
-     //   MenuItem item = menu.findItem(R.id.nav_share);
-        // Fetch and store ShareActionProvider
-//        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-//
-//        if (mShareActionProvider != null) {
-//            Intent shareIntent = new Intent();
-//            shareIntent.setAction(Intent.ACTION_SEND);
-//            shareIntent.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=motiur_bdjobs.bd.com.allbdjobs");
-//            shareIntent.setType("text/plain");
-//            mShareActionProvider.setShareIntent(shareIntent);
-//        }
-
-
+        //  Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -210,11 +185,24 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+
+        if (id == R.id.refrash) {
+
+            if (isNetworkConnected()) {
+                loadRecyclerViewData();
+            } else {
+                Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
+            }
+
+
+        }
+
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_update) {
             if (isNetworkConnected()) {
                 Intent devAccount = new Intent(Intent.ACTION_VIEW);
-                devAccount.setData(Uri.parse("market://details?id=morahman.bd.com.islamic_waz"));
+                devAccount.setData(Uri.parse("market://details?id=morahman.bd.com.islamicWazPro"));
                 startActivity(devAccount);
             } else {
                 Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
@@ -227,7 +215,7 @@ public class MainActivity extends AppCompatActivity
             if (isNetworkConnected()) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
 
-                i.setData(Uri.parse("market://details?id=morahman.bd.com.islamic_waz"));
+                i.setData(Uri.parse("market://details?id=morahman.bd.com.islamicWazPro"));
                 startActivity(i);
             } else {
                 Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
@@ -241,7 +229,7 @@ public class MainActivity extends AppCompatActivity
             if (isNetworkConnected()) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
 
-                i.setData(Uri.parse("http://play.google.com/store/apps/dev?id=6031616565948906744"));
+                i.setData(Uri.parse("https://play.google.com/store/apps/dev?id=7955052953183373879"));
                 startActivity(i);
             } else {
                 Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
@@ -261,11 +249,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.bdJobs) {
+        if (id == R.id.ageCal) {
             // Handle the camera action
             if (isNetworkConnected()) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("market://details?id=motiur_bdjobs.bd.com.allbdjobs"));
+                i.setData(Uri.parse("market://details?id=com.bd.agecalculatorPro"));
                 startActivity(i);
             } else {
                 Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
@@ -273,24 +261,29 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.bdResult) {
             if (isNetworkConnected()) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("market://details?id=motiur_bdresult.bd.com.bdresult"));
+                intent.setData(Uri.parse("market://details?id=motiur_bdresult.bd.com.bdresultpro"));
                 startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
             }
 
-        } else if (id == R.id.nav_share) {
-
-
+        } else if (id == R.id.pass) {
+            if (isNetworkConnected()) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("market://details?id=com.bd.PasswordManagerPro"));
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
+            }
 
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     private class MyonclickListner implements View.OnClickListener {
+
         public MyonclickListner(MainActivity mainActivity) {
         }
 
@@ -298,14 +291,14 @@ public class MainActivity extends AppCompatActivity
         public void onClick(View v) {
 
             int selectedItemPosition = recyclerView.getChildAdapterPosition(v);
+
             RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(selectedItemPosition);
-            TextView textView = (TextView) viewHolder.itemView.findViewById(R.id.heading);
+            TextView textView = (TextView) viewHolder.itemView.findViewById(R.id.speakerName);
+            LinearLayout layout = (LinearLayout) viewHolder.itemView.findViewById(R.id.linearLayout);
             String selectName = (String) textView.getText();
-            Intent intent = new Intent(v.getContext(),Waz.class);
-            intent.putExtra("name",selectName);
+            Intent intent = new Intent(v.getContext(), Waz.class);
+            intent.putExtra("name", selectName);
             v.getContext().startActivity(intent);
-
-
         }
     }
 }

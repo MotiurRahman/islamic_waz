@@ -1,4 +1,4 @@
-package morahman.bd.com.islamic_waz;
+package morahman.bd.com.islamicWazPro;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -89,7 +88,7 @@ public class Waz extends AppCompatActivity {
 
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loding the data");
+        progressDialog.setMessage("Data is Loading");
         progressDialog.show();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, myUrl, new Response.Listener<String>() {

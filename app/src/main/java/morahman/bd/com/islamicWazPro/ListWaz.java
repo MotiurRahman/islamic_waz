@@ -1,4 +1,4 @@
-package morahman.bd.com.islamic_waz;
+package morahman.bd.com.islamicWazPro;
 
 /**
  * Created by user on 21/5/18.

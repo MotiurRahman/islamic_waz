@@ -1,4 +1,4 @@
-package morahman.bd.com.islamic_waz;
+package morahman.bd.com.islamicWazPro;
 
 import org.junit.Test;
 

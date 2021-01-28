@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="morahman.bd.com.islamic_waz.Waz"
+    tools:context="morahman.bd.com.islamicWazPro.Waz"
     tools:showIn="@layout/activity_waz">
 
     <androidx.recyclerview.widget.RecyclerView

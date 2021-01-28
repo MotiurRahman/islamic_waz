@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/nav_share"
-        android:icon="@drawable/ic_menu_share"
-        android:title="Share"
-        app:showAsAction="always"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
+        android:id="@+id/refrash"
+        android:icon="@drawable/refresh"
+        android:title="refrash"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_ratings"

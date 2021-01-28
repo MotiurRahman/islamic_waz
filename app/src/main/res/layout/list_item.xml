@@ -5,6 +5,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_margin="@dimen/activity_horizontal_margin"
+        android:background="@drawable/background_ripple"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -12,14 +13,15 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:orientation="vertical"
+            android:background="?android:attr/selectableItemBackground"
             android:padding="16dp"
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/heading"
+                android:id="@+id/speakerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Heading"
+                android:text="SpeakerName"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat"/>
 
 

@@ -1,4 +1,4 @@
-package morahman.bd.com.islamic_waz;
+package morahman.bd.com.islamicWazPro;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,12 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -46,21 +44,14 @@ public class WazAdapter extends RecyclerView.Adapter<WazAdapter.ViewHolder>  {
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Intent intent = new Intent(v.getContext(),letsPlay.class);
-//                intent.putExtra("URL",listItem.getUrlName());
-//                v.getContext().startActivity(intent);
-//
-                String URL =listItem.getUrlName(); // your URL here
-                //Intent intent = new Intent();
 
-                Intent intent = new Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER);
+                String URL =listItem.getUrlName(); // your URL here
+                Intent intent = new Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
                 //  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 intent.setAction(android.content.Intent.ACTION_VIEW);
                 intent.setDataAndType(Uri.parse(URL), "audio/*");
                 v.getContext().startActivity(intent);
-
-
 
                 //Toast.makeText(context,"URL Value:"+listItem.getUrlName(), Toast.LENGTH_LONG).show();
             }

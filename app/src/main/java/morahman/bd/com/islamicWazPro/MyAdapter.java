@@ -1,14 +1,12 @@
-package morahman.bd.com.islamic_waz;
+package morahman.bd.com.islamicWazPro;
 
 import android.content.Context;
-import android.content.Intent;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,10 +19,10 @@ import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
-    private List<ListItem> listItems;
+    private List<String> listItems;
     private Context context;
 
-    public MyAdapter(List<ListItem> listItems, Context context) {
+    public MyAdapter(List<String> listItems, Context context) {
         this.listItems = listItems;
         this.context = context;
     }
@@ -40,18 +38,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final ListItem listItem = listItems.get(position);
-        holder.texHead.setText(listItem.getHead());
-//        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//               Intent intent = new Intent(v.getContext(),Waz.class);
-//                intent.putExtra("name",listItem.getHead());
-//                v.getContext().startActivity(intent);
-//
-//              // Toast.makeText(context,"You clicked:"+listItem.getHead(),Toast.LENGTH_LONG).show();
-//            }
-//        });
+       // final String listItem = listItems.get(position);
+        //holder.speakerName.setText(listItem.getSpeakerName());
+        holder.speakerName.setText(listItems.get(position));
+
 
     }
 
@@ -62,12 +52,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView texHead;
+        public TextView speakerName;
         public LinearLayout linearLayout;
         public ViewHolder(View itemView) {
             super(itemView);
 
-            texHead =(TextView)itemView.findViewById(R.id.heading);
+            speakerName =(TextView)itemView.findViewById(R.id.speakerName);
             linearLayout =(LinearLayout) itemView.findViewById(R.id.linearLayout);
         }
     }

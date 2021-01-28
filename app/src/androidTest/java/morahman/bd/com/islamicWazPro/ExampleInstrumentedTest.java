@@ -1,4 +1,4 @@
-package morahman.bd.com.islamic_waz;
+package morahman.bd.com.islamicWazPro;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
